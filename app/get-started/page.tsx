@@ -242,7 +242,7 @@ export default function GetStartedPage() {
     queryParams.append("name", `${formData.firstName} ${formData.lastName}`)
     queryParams.append("email", formData.email)
     queryParams.append("company", formData.company)
-    queryParams.append("phone", `${formData.countryCode} ${formData.phone}`)
+    queryParams.append("phonenumber", `${formData.countryCode} ${formData.phone}`)
 
     queryParams.append("custom_businessType", formData.businessType)
     queryParams.append("custom_projectType", formData.projectType)
