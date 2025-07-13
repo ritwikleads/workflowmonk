@@ -4,6 +4,8 @@ import type React from "react"
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
+import { AnalyticsProvider } from "@/components/analytics-provider"
+import { event } from "@/lib/gtag"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -214,6 +216,14 @@ export default function GetStartedPage() {
   ]
 
   const handleNext = () => {
+    // Track step progression
+    event({
+      action: 'step_completed',
+      category: 'Get Started Form',
+      label: `Step ${currentStep}`,
+      value: currentStep
+    })
+
     setIsAnimating(true)
     setTimeout(() => {
       if (currentStep < steps.length - 1) {
@@ -236,6 +246,13 @@ export default function GetStartedPage() {
   }
 
   const handleSubmit = () => {
+    // Track form completion
+    event({
+      action: 'form_completed',
+      category: 'Get Started Form',
+      label: 'Contact Info Submitted'
+    })
+
     // Construct Cal.com URL with pre-filled data
     const calComBaseUrl = "https://cal.com/ritwik-singh/30min"
     const queryParams = new URLSearchParams()
@@ -350,6 +367,11 @@ export default function GetStartedPage() {
                   key={type.value}
                   onClick={() => {
                     setFormData({ ...formData, businessType: type.value })
+                   event({
+                     action: 'business_type_selected',
+                     category: 'Get Started Form',
+                     label: type.label
+                   })
                     setTimeout(handleNext, 500)
                   }}
                   className={`group relative p-6 border border-[#404040] rounded-2xl hover:border-[#5fa973]/50 transition-all duration-300 text-left ${
@@ -426,6 +448,11 @@ export default function GetStartedPage() {
                 key={type.value}
                 onClick={() => {
                   setFormData({ ...formData, projectType: type.value })
+                 event({
+                   action: 'project_type_selected',
+                   category: 'Get Started Form',
+                   label: type.label
+                 })
                   setTimeout(handleNext, 500)
                 }}
                 className={`group relative p-8 border border-[#404040] rounded-2xl hover:border-[#5fa973]/50 transition-all duration-300 text-left ${
@@ -502,6 +529,11 @@ export default function GetStartedPage() {
                 key={range.value}
                 onClick={() => {
                   setFormData({ ...formData, monthlyRevenue: range.value })
+                 event({
+                   action: 'revenue_range_selected',
+                   category: 'Get Started Form',
+                   label: range.label
+                 })
                   setTimeout(handleNext, 500)
                 }}
                 className={`group relative p-4 border border-[#404040] rounded-xl hover:border-[#5fa973]/50 transition-all duration-300 text-left ${
@@ -756,6 +788,11 @@ export default function GetStartedPage() {
                 <Button
                   onClick={handleSubmit}
                   size="lg"
+                 onClick={() => event({
+                   action: 'click',
+                   category: 'Get Started Form',
+                   label: 'Schedule My Call'
+                 })}
                   className="bg-gradient-to-r from-[#5fa973] to-[#44713c] hover:from-[#44713c] hover:to-[#5fa973] text-[#130f0a] font-semibold px-12 py-4 text-lg rounded-full shadow-2xl shadow-[#5fa973]/25 hover:shadow-[#5fa973]/40 transition-all duration-300 hover:transform hover:scale-105"
                 >
                   <Calendar className="mr-2 h-5 w-5" />
@@ -809,6 +846,16 @@ export default function GetStartedPage() {
             <Button
               onClick={() => router.push("/?success=true")}
               variant="outline"
+            onClick={() => event({
+              action: 'click',
+              category: 'Get Started Form',
+              label: 'Schedule Later'
+            })}
+              onClick={() => event({
+                action: 'click',
+                category: 'Get Started Form',
+                label: 'Welcome Get Started'
+              })}
               className="bg-transparent border-[#d2c1ab] text-[#d2c1ab] hover:bg-[#d2c1ab] hover:text-[#130f0a] px-6 py-2"
             >
               I'll Schedule Later
@@ -823,7 +870,8 @@ export default function GetStartedPage() {
   const progress = currentStep === 0 ? 0 : ((currentStep - 1) / (steps.length - 2)) * 100
 
   return (
-    <div className="min-h-screen bg-[#130f0a] text-[#f2ece6] relative overflow-hidden">
+    <AnalyticsProvider>
+      <div className="min-h-screen bg-[#130f0a] text-[#f2ece6] relative overflow-hidden">
       {/* Enhanced Background Effects */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-br from-[#130f0a] via-[#1a1410] to-[#130f0a]"></div>
@@ -842,6 +890,11 @@ export default function GetStartedPage() {
         <div className="flex justify-between items-center p-6 lg:p-8">
           <button
             onClick={handleBack}
+            onClick={() => event({
+              action: 'click',
+              category: 'Navigation',
+              label: 'Back Button'
+            })}
             className="flex items-center text-[#666] hover:text-[#f2ece6] transition-all duration-300 group"
           >
             <ArrowLeft className="h-5 w-5 mr-2 group-hover:transform group-hover:-translate-x-1 transition-transform" />
@@ -858,6 +911,11 @@ export default function GetStartedPage() {
 
           <button
             onClick={() => router.push("/")}
+           onClick={() => event({
+             action: 'click',
+             category: 'Navigation',
+             label: 'Close Button'
+           })}
             className="text-[#666] hover:text-[#f2ece6] transition-colors p-2 hover:bg-[#1a1a1a]/50 rounded-full"
           >
             <X className="h-6 w-6" />
@@ -912,5 +970,6 @@ export default function GetStartedPage() {
         </div>
       </div>
     </div>
+   </AnalyticsProvider>
   )
 }

@@ -1,5 +1,6 @@
 "use client"
 
+import { AnalyticsProvider } from "@/components/analytics-provider"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
@@ -7,6 +8,7 @@ import { Star, CheckCircle, ArrowRight, Zap, Users, Mail } from "lucide-react"
 import Link from "next/link"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
+import { event } from "@/lib/gtag"
 
 export default function HomePage() {
   const testimonials = [
@@ -62,7 +64,8 @@ export default function HomePage() {
   ]
 
   return (
-    <div className="min-h-screen bg-[#130f0a] text-[#f2ece6]">
+    <AnalyticsProvider>
+      <div className="min-h-screen bg-[#130f0a] text-[#f2ece6]">
       {/* Navigation */}
       <nav className="border-b border-[#d2c1ab]/20 bg-[#130f0a]/95 backdrop-blur-md sticky top-0 z-50 shadow-lg shadow-[#130f0a]/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -147,6 +150,11 @@ export default function HomePage() {
               <Link href="/get-started">
                 <Button
                   size="lg"
+                  onClick={() => event({
+                    action: 'click',
+                    category: 'CTA',
+                    label: 'Hero Start Free Analysis'
+                  })}
                   className="bg-gradient-to-r from-[#5fa973] to-[#44713c] hover:from-[#44713c] hover:to-[#5fa973] text-[#130f0a] font-semibold px-8 py-4 text-lg shadow-2xl shadow-[#5fa973]/25 hover:shadow-[#5fa973]/40 transition-all duration-300 hover:transform hover:scale-105"
                 >
                   <Zap className="mr-2 h-5 w-5" />
@@ -357,6 +365,11 @@ export default function HomePage() {
 
               <Link href="/get-started" className="w-full">
                 <Button className="w-full bg-[#d2c1ab] hover:bg-[#d2c1ab]/80 text-[#130f0a] font-semibold py-3 rounded-xl transition-all duration-300 mt-auto">
+                  onClick={() => event({
+                    action: 'click',
+                    category: 'CTA',
+                    label: 'Free Tier Get Started'
+                  })}
                   Get Started Free
                 </Button>
               </Link>
@@ -403,6 +416,11 @@ export default function HomePage() {
 
               <Link href="/get-started" className="w-full">
                 <Button className="w-full bg-[#5fa973] hover:bg-[#44713c] text-[#130f0a] font-semibold py-3 rounded-xl transition-all duration-300 mt-auto">
+                  onClick={() => event({
+                    action: 'click',
+                    category: 'CTA',
+                    label: 'Custom Tier Request Quote'
+                  })}
                   Request a Quote
                 </Button>
               </Link>
@@ -444,6 +462,11 @@ export default function HomePage() {
 
               <Link href="/get-started" className="w-full">
                 <Button className="w-full bg-[#d2c1ab] hover:bg-[#d2c1ab]/80 text-[#130f0a] font-semibold py-3 rounded-xl transition-all duration-300 mt-auto">
+                  onClick={() => event({
+                    action: 'click',
+                    category: 'CTA',
+                    label: 'BusinessOS Choose Plan'
+                  })}
                   Choose BusinessOS
                 </Button>
               </Link>
@@ -463,6 +486,11 @@ export default function HomePage() {
             <Link href="/get-started">
               <Button
                 size="lg"
+                onClick={() => event({
+                  action: 'click',
+                  category: 'CTA',
+                  label: 'Final CTA Start Analysis'
+                })}
                 className="bg-[#5fa973] hover:bg-[#44713c] text-[#130f0a] font-semibold px-8 py-4 text-lg"
               >
                 <ArrowRight className="mr-2 h-5 w-5" />
@@ -536,6 +564,11 @@ export default function HomePage() {
               <Button
                 type="submit"
                 size="lg"
+                onClick={() => event({
+                  action: 'click',
+                  category: 'Newsletter',
+                  label: 'Subscribe'
+                })}
                 className="bg-gradient-to-r from-[#5fa973] to-[#44713c] hover:from-[#44713c] hover:to-[#5fa973] text-[#130f0a] font-semibold px-8 py-4 text-lg rounded-xl shadow-lg shadow-[#5fa973]/25 hover:shadow-[#5fa973]/40 transition-all duration-300 hover:transform hover:scale-105"
               >
                 Subscribe
@@ -559,5 +592,6 @@ export default function HomePage() {
         </div>
       </footer>
     </div>
+    </AnalyticsProvider>
   )
 }
